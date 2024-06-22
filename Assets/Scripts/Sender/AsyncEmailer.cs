@@ -16,6 +16,9 @@ namespace Emails.Emailer
         private static string senderPassword;
         private static string smtpHost;
         private static int smtpPort;
+
+        private static string messageSubject;
+        private static string messageBody;
         #endregion
 
         #region METHODS
@@ -50,6 +53,7 @@ namespace Emails.Emailer
             message.From.Add(new MailboxAddress("Game Character", senderEmail));
             message.To.Add(new MailboxAddress("User Receiver", receiverEmail));
             message.Subject = subject;
+            messageSubject = subject;
 
             var multipartBody = new Multipart("mixed");
             {
@@ -67,6 +71,7 @@ namespace Emails.Emailer
                 Text = body
             };
             multipartBody.Add(textPart);
+            messageBody = body;
         }
         private static void CreateAttachmentsPart(List<string> attachments, Multipart multipartBody)
         {
@@ -95,7 +100,17 @@ namespace Emails.Emailer
                 await client.SendAsync(message);
                 await client.DisconnectAsync(true);
                 Debug.Log("Sent emailToCheck asynchronously!");
+
+                SendNotificationInfo();
             }
+        }
+        private static void SendNotificationInfo()
+        {
+            List<(string name, string body, Color color)> texts = new();
+            texts.Add(("From:", senderEmail, Color.white));
+            texts.Add(("Subject:", messageSubject, Color.white));
+            texts.Add(("Body:", messageBody, Color.white));
+            AnimatedNotificationManager.Send(texts);
         }
         #endregion
     }

@@ -50,7 +50,7 @@ namespace Emails.Emailer.Sender
             // Enviar un correo electrónico
             List<string> attachments = new()
             {
-                "Assets/Resources/neuron_activation.jpg"
+                "C:/Users/aleja/OneDrive/Pictures/neuron_activation.jpg"
             };
 
             Debug.Log(attachments[0]);
