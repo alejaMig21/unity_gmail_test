@@ -16,6 +16,8 @@ public class NotificationConfigurator : MonoBehaviour
     [SerializeField]
     private GameObject notificationPrefab = null;
     [SerializeField]
+    private GameObject errorNPrefab = null;
+    [SerializeField]
     private float initCGAlpha = 1f;
     [SerializeField]
     private float endCGAlpha = 0f;
@@ -29,6 +31,7 @@ public class NotificationConfigurator : MonoBehaviour
     public float TimeOnScreen { get => timeOnScreen; set => timeOnScreen = value; }
     public float InitCGAlpha { get => initCGAlpha; set => initCGAlpha = value; }
     public float EndCGAlpha { get => endCGAlpha; set => endCGAlpha = value; }
+    public GameObject ErrorNPrefab { get => errorNPrefab; set => errorNPrefab = value; }
     #endregion
 
     #region METHODS
@@ -37,13 +40,14 @@ public class NotificationConfigurator : MonoBehaviour
         AnimatedNotificationManager.Configurator = this;
     }
     /// <summary>
-    /// Método para obtener una instancia de AnimatedNotification configurada
+    /// Method to obtain a configured instance of AnimatedNotification.
     /// </summary>
+    /// <param name="type">0 means normal notification, 1 means error notification</param>
     /// <returns></returns>
-    public AnimatedNotification GetConfiguredNotification()
+    public AnimatedNotification GetConfiguredNotification(byte type = 0)
     {
         // Instancia un AnimatedNotification
-        if (Instantiate(NotificationPrefab, transform).TryGetComponent<AnimatedNotification>(out var notification))
+        if (Instantiate(GetNotification(type), transform).TryGetComponent<AnimatedNotification>(out var notification))
         {
             notification.TryGetComponent<RectTransform>(out var rect);
 
@@ -59,6 +63,18 @@ public class NotificationConfigurator : MonoBehaviour
 
         Debug.LogError("Provided Prefab does not have an AnimatedNotification component attached to it!");
         return null;
+    }
+    private GameObject GetNotification(byte type)
+    {
+        switch (type)
+        {
+            case 0:
+                return notificationPrefab;
+            case 1:
+                return errorNPrefab;
+            default:
+                return null;
+        }
     }
     private void SetTimers(AnimatedNotification notification)
     {

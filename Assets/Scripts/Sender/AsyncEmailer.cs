@@ -1,6 +1,8 @@
-﻿using MailKit.Net.Smtp;
+﻿using Emails.Emailer.ExeptionHandler;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -94,22 +96,29 @@ namespace Emails.Emailer
         {
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync(smtpHost, smtpPort, SecureSocketOptions.StartTls);
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
-                await client.AuthenticateAsync(senderEmail, senderPassword);
-                await client.SendAsync(message);
-                await client.DisconnectAsync(true);
-                Debug.Log("Sent emailToCheck asynchronously!");
+                try
+                {
+                    await client.ConnectAsync(smtpHost, smtpPort, SecureSocketOptions.StartTls);
+                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    await client.AuthenticateAsync(senderEmail, senderPassword);
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
+                    Debug.Log("Sent emailToCheck asynchronously!");
 
-                SendNotificationInfo();
+                    SendEmailNotificationInfo();
+                }
+                catch (Exception ex)
+                {
+                    ExceptionHandler.ExceptionHandeling(ex);
+                }
             }
         }
-        private static void SendNotificationInfo()
+        private static void SendEmailNotificationInfo()
         {
-            List<(string name, string body, Color color)> texts = new();
-            texts.Add(("From:", senderEmail, Color.white));
-            texts.Add(("Subject:", messageSubject, Color.white));
-            texts.Add(("Body:", messageBody, Color.white));
+            List<(string name, string body)> texts = new();
+            texts.Add(("From:", senderEmail));
+            texts.Add(("Subject:", messageSubject));
+            texts.Add(("Body:", messageBody));
             AnimatedNotificationManager.Send(texts);
         }
         #endregion

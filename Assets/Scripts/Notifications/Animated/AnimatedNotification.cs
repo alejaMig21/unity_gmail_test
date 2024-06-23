@@ -56,7 +56,7 @@ public class AnimatedNotification : MonoBehaviour
     #endregion
 
     #region METHODS
-    public void UpdateTexts(List<(string name, string text, Color color)> newTexts)
+    public void UpdateTexts(List<(string name, string text)> newTexts)
     {
         if (newTexts.Count != this.texts.Count)
         {
@@ -69,7 +69,6 @@ public class AnimatedNotification : MonoBehaviour
             TextInfo item = this.texts[i];
             item.Name = newTexts[i].name;
             item.TextMesh.text = newTexts[i].text;
-            item.Color = newTexts[i].color;
         }
     }
     public IEnumerator StartAnimation()

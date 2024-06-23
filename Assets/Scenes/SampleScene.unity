@@ -1606,6 +1606,8 @@ MonoBehaviour:
   timeOnScreen: 2
   notificationPrefab: {fileID: 4727793969148689832, guid: ce189fb0826352b48bdd4b010552a58d,
     type: 3}
+  errorNPrefab: {fileID: 4727793969148689832, guid: 38f70e4d446edfa41a28a89db63cd99e,
+    type: 3}
   initCGAlpha: 1
   endCGAlpha: 0
 --- !u!1 &330585543

@@ -13,7 +13,12 @@ public static class AnimatedNotificationManager
     #endregion
 
     #region METHODS
-    public static async void Send(List<(string name, string text, Color color)> texts)
+    /// <summary>
+    /// Method to send an AnimatedNotification.
+    /// </summary>
+    /// <param name="texts">Body of the notification</param>
+    /// <param name="type">0 means normal notification, 1 means error notification</param>
+    public static async void Send(List<(string name, string text)> texts, byte type = 0)
     {
         // Si no tenemos una referencia al NotificationConfigurator, la obtenemos
         if (Configurator == null)
@@ -22,7 +27,7 @@ public static class AnimatedNotificationManager
         }
 
         // Obtenemos una instancia de AnimatedNotification configurada
-        AnimatedNotification notification = Configurator.GetConfiguredNotification();
+        AnimatedNotification notification = Configurator.GetConfiguredNotification(type);
 
         // Configuramos el texto de la notificación
         notification.UpdateTexts(texts);
